@@ -1,0 +1,23 @@
+{
+  "name": "mailer",
+  "version": "1.0.0",
+  "description": "Node Mailer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ray",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.2.0",
+    "csvtojson": "^2.0.8",
+    "googleapis": "^27.0.0",
+    "nodemailer": "^5.1.1",
+    "p-iteration": "^1.1.7"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  }
+}
