@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import nodemailer from 'nodemailer';
 import csvtojson from "csvtojson";
+import ora from 'ora';
 import config from './config';
 import { google } from 'googleapis';
 import { authorize, getAccessToken } from './lib/drive';
@@ -27,8 +28,9 @@ let mailList = [{
 
 // If attachment folder is not exist, create one
 if (!fs.existsSync(ABSPATH + '/attachments')) {
+    const spinner = ora().start('No folder found!');
     fs.mkdirSync(ABSPATH + '/attachments');
-    console.log('No folder found! Folder created')
+    spinner.succeed('Folder created');
 }
 
 // Let the loop begin
@@ -37,8 +39,11 @@ mailList.forEach((el, i) => {
     fs.readFile('credentials.json', (err, content) => {
         if (err) return console.log('Error loading client secret file:', err);
         // Authorize a client with credentials, then call the Google Drive API.
+        const spinner = ora().start('Downloading file');
         authorize(JSON.parse(content), downloadFile);
-        console.log('File Downloaded')
+        // console.log('File Downloaded')
+        spinner.stop();
+        spinner.succeed('File Downloaded');
     });
 
     function downloadFile(auth) {
@@ -49,6 +54,8 @@ mailList.forEach((el, i) => {
 
         let fileId = el.attachments.match(/[-\w]{25,}/);
         let dest = fs.createWriteStream(ABSPATH + '/attachments/document_' + i + '.pdf');
+
+        const spinner = ora().start('Sending email');
 
         drive.files.get({
             fileId: fileId,
@@ -73,9 +80,12 @@ mailList.forEach((el, i) => {
                     // Sending email
                     transporter.sendMail(options, (error, info) => {
                         if (error) {
-                            console.log(error, 'XXXXXXX')
+                            console.log(error, 'XXXXXXX');
+                            spinner.fail('Failed to send email!');
+                            spinner.stop();
                         } else {
-                            console.log('Email Sent Successfully')
+                            spinner.succeed('Email sent successfully to ' + info.envelope.to[0]);
+                            spinner.stop();
                         }
                     });
                 })
