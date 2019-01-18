@@ -1,4 +1,5 @@
 node_modules
+attachments
 config.js
 credentials.json
 token.json
