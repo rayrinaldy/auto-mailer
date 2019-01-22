@@ -13,6 +13,7 @@
     "csvtojson": "^2.0.8",
     "googleapis": "^27.0.0",
     "nodemailer": "^5.1.1",
+    "nodemailer-mailgun-transport": "^1.4.0",
     "p-iteration": "^1.1.7",
     "xoauth2": "^1.2.0"
   },

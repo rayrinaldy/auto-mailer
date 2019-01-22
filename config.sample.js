@@ -10,5 +10,9 @@ module.exports = {
         clientId: "xxxx-xxx.apps.googleusercontent.com",
         clientSecret: "xxxxx",
         refreshToken: "1/xxxxxxxxx",
+    },
+    mailgun: {
+        api_key: 'key-1234123412341234',
+        domain: 'one of your domain names listed at your https://mailgun.com/app/domains'
     }
 }

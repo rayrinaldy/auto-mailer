@@ -3,6 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import nodemailer from 'nodemailer';
+import mg from 'nodemailer-mailgun-transport';
 import csv from "csvtojson";
 import ora from 'ora';
 import config from './config';
@@ -12,9 +13,22 @@ import { authorize, getAccessToken } from './lib/drive';
 // Absolute path to our app directory
 const ABSPATH = path.dirname(process.mainModule.filename); 
 
+
+// Get CSV file to extract data
+const csvFilePath = './mail.csv';
+
+// Test Template
 const htmlTemplate = fs.createReadStream(ABSPATH + '/views/hakama_template.html',{encoding:'utf-8'});
 
-// Emails credentials
+// This is your API key that you retrieve from www.mailgun.com/cp (free up to 10K monthly emails)
+const mailgunAuth = {
+    auth: {
+        api_key: config.mailgun.api_key,
+        domain: config.mail.domain
+    },
+}
+
+// Emails credentials (Choose between normal GMAIL or MAILGUN)
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     service: 'gmail',
@@ -30,7 +44,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const csvFilePath = './mail.csv';
+const mailgunTransporter = nodemailer.createTransport(mg(auth));
+
 
 // // Gonna change this to CSV later
 // let mailList = [{
